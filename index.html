@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Age Calculator</title>
+    <link rel="stylesheet" href="./style.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="calculator">
+        <h1>Age Calculator</h1>
+        <div class="input-box">
+          <input type="date" id="date">
+          <button onclick="calculateDate()">Calculate</button>
+        </div>
+        <h1 id="result"></h1>
+      </div>
+    </div>
+
+  <script>
+    let userInput = document.getElementById("date")
+    userInput.max = new Date().toISOString().split("T")[0]
+    let outputElement = document.getElementById("result") 
+
+    function calculateDate() {
+      //get input date, day, month, year
+      let inputDate = new Date(userInput.value)
+      let inputDay = inputDate.getDate();
+      let inputMonth = inputDate.getMonth() + 1;
+      let inputYear = inputDate.getFullYear();
+
+      //get current date, day, month, year
+      let currentDate = new Date();
+      let currentDay = currentDate.getDate();
+      let currentMonth = currentDate.getMonth() + 1;
+      let currentYear = currentDate.getFullYear();
+
+      let resultDay, resultMonth, resultYear;
+
+      //day calculation
+      if(currentDay >= inputDay){
+        resultDay = currentDay - inputDay
+      }else{
+        inputMonth--;
+        resultDay = daysInMonth(inputYear, inputMonth) + currentDay - inputDay;
+      }
+
+      //if daysInMonth = 28, currentDay = 1, inputDay = 31 resultDay<0
+      if(resultDay < 0){
+        resultMonth = 11;
+        resultYear--;  
+      }
+
+      //month calculation
+      if(currentMonth >= inputMonth){
+        resultMonth = currentMonth - inputMonth;
+      }else{
+        currentYear--;
+        resultMonth = (currentMonth + 10) - inputMonth;
+      }
+
+      //year calculation
+      if(currentYear >= inputYear){
+        resultYear = currentYear - inputYear;
+      }
+
+      outputElement.innerHTML =
+      `You are ${resultYear} years, ${resultMonth} months, ${resultDay} days old`
+    }
+
+    function daysInMonth(year, month){
+      return new Date(year, month, 0).getDate();
+    }
+  </script>
+
+  </body>
+</html>
